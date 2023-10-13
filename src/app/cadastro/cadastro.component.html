@@ -117,8 +117,36 @@
 
     <div class="formulario__campo">
       <label class="campo__etiqueta" for="cep">CEP</label>
-      <input name="cep" id="cep" class="campo__escrita" ngModel />
-      <div id="erro"></div>
+      <input
+        name="cep"
+        id="cep"
+        class="campo__escrita"
+        ngModel
+        required
+        #cep="ngModel"
+        pattern="^(\d{5})(-?\d{3})$"
+        minlength="8"
+        maxlength="9"
+        validadorCep
+        (blur)="consultaCep($event, f)"
+      />
+      <div *ngIf="(cep.invalid && cep.touched) || cep.dirty">
+        <app-mensagem
+          [mensagem]="'O campo de cep deve ser preenchido.'"
+          *ngIf="cep.errors?.['required']"
+        >
+        </app-mensagem>
+        <app-mensagem
+          [mensagem]="'Campo cep inválido'"
+          *ngIf="cep.errors?.['pattern']"
+        >
+        </app-mensagem>
+        <app-mensagem
+          [mensagem]="'Cep não existe'"
+          *ngIf="cep.errors?.['validadorCep']"
+        >
+        </app-mensagem>
+      </div>
     </div>
 
     <div class="formulario__campo">
